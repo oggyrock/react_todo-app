@@ -1,18 +1,21 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { connect } from 'react-redux';
 import { TodoList } from './components/TodoList';
 import { TodosFilter } from './components/TodosFilter';
+import { addTodo } from './store';
 
 function App() {
   const [title, setTitle] = useState('');
   const [uneditedTitles, setUneditedTitles] = useState({});
   const [toggleAll, setToggleAll] = useState(true);
+  const [todoList, setTodoList] = useState([]);
   const filters = {
     all: 'All',
     active: 'Active',
     completed: 'Completed',
   };
-  const [todoList, setTodoList] = useState([]);
   const [filter, setFilter] = useState(filters.all);
+  // const { todoList } = this.props;
 
   const filteredList = useMemo(() => todoList.filter((todo) => {
     if (filter === filters.completed) {
@@ -35,10 +38,11 @@ function App() {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (newTodo.title) {
-      setTodoList([
-        ...todoList,
-        newTodo,
-      ]);
+      // setTodoList([
+      //   ...todoList,
+      //   newTodo,
+      // ]);
+      addTodo(newTodo);
       setTitle('');
       setToggleAll(todoList.some(todo => !todo.completed));
     }
@@ -51,7 +55,7 @@ function App() {
 
       return { ...todo };
     });
-    setTodoList([...todoList]);
+    // setTodoList([...todoList]);
   };
 
   useEffect(() => (
@@ -114,4 +118,4 @@ function App() {
   );
 }
 
-export default App;
+export default connect(state => ({ todoList: state }), { addTodo })(App);

@@ -61,10 +61,15 @@ export function TodoItem({
   };
 
   const handleBlur = ({ target }) => {
-    const field = target;
+    if (!target.value.trim()) {
+      todoList.splice(index, 1);
+      setTodoList([...todoList]);
+    } else {
+      const x = target;
 
-    field.closest('li').className
-      = todo.completed ? 'completed' : '';
+      x.closest('li').className
+        = todo.completed ? 'completed' : '';
+    }
   };
 
   return (
